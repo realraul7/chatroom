@@ -1,0 +1,67 @@
+<div class="page-wrap">
+	<div class="home-wrap clear">
+	<a id="logout-btn" class="btn btn-primary" ng-click="logout()">登出</a>
+	<div class="home-list-wrap">
+		<div class="user-bar">
+			<img src="img/aa.jpg">
+			<p class="user-name">{{me.username}}</p>
+		</div>
+		<div class="list-header box">
+			<span class="new-btn" ng-click="changeRoomProcessMode(0)">新建</span>	<p>聊天室列表</p> <span class="search-btn" ng-click="changeRoomProcessMode(1)"></span>
+		</div>
+		<div class="new-search-bar" ng-hide="room_process_hide">
+			<form ng-submit="roomprocess()">
+				<input type="text" class="new-search-input" placeholder="请输入房间名"><input type="submit"  class="new-search-btn {{btn_style}}"  value="{{room_process}}"> 
+			</form>
+			
+		</div>
+		<div class="list-body-wrap">
+			<ul class="list-body" >
+				<li ng-repeat = "room in room_list" style="position: relative">
+					<a href="javascript:void(0)" style="display: inline-block;height: 100%;width: 100%" >
+						<img src="img/room_icon.jpg">
+						<span>{{room.name}}</span>
+						<a href="javascript:void(0)" style="position:absolute;right:10px;top:50%;margin-top: -15px;height: 30px;width: 50px;color:#fff;background-color: #0cce70;border-radius: 4px;line-height: 30px;text-align: center;font-size: 16px;" ng-click="openRoom(room._id,room.name)">进入</a>
+					</a>
+					
+				</li>
+				
+			</ul>
+		</div>
+		
+	</div>
+	<div class="right-wrap" style="display: none">
+		<div class="chat-panel-header box">
+			<span>{{room.name}}</span>
+			<span class="close-chat-btn" ng-click="closeRoom()">关闭</span>
+		</div>
+		<div class="chat-panel-body">
+			<div class="chat-content-panel">
+				<ul auto-scroll-to-bottom>
+					<li class="content-li" ng-repeat = "message in messageList">
+						<span class="user-name">{{message.user}}：</span> <span class="chat-content">
+						{{message.content}}
+					</span>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+	<div class="chat-panel-footer box">
+		<textarea class="chat-input" ng-model="newMessage" ctrl-enter-break-line="createMessage()"> </textarea> 
+		<button class="send-btn" ng-click="createMessage()">发送</button>
+	</div>
+	<div class="user-list">
+		<div class="header">
+			在线用户
+		</div>
+		<div class="wrap">
+			<ul>
+				<li ng-repeat = "user in OnlineUserList">{{user.username}}</li>	
+			</ul>
+		</div>
+		
+	</div>
+</div>
+</div>
+</div>

@@ -1,0 +1,201 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+ var app = require('../app');
+ var debug = require('debug')('chatroom:server');
+ var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+ var port = normalizePort(process.env.PORT || '3000');
+ app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+ var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+ server.listen(port);
+ server.on('error', onError);
+ server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+ function normalizePort(val) {
+   var port = parseInt(val, 10);
+
+   if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+ function onError(error) {
+   if (error.syscall !== 'listen') {
+     throw error;
+   }
+
+   var bind = typeof port === 'string'
+   ? 'Pipe ' + port
+   : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+    console.error(bind + ' requires elevated privileges');
+    process.exit(1);
+    break;
+    case 'EADDRINUSE':
+    console.error(bind + ' is already in use');
+    process.exit(1);
+    break;
+    default:
+    throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+ function onListening() {
+   var addr = server.address();
+   var bind = typeof addr === 'string'
+   ? 'pipe ' + addr
+   : 'port ' + addr.port;
+   debug('Listening on ' + bind);
+ }
+
+
+
+/**
+ * 扩展数组对象本身函数，提供根据删除数组中指定对象的函数
+ * 
+ */
+ Array.prototype.removeByValue = function(value){
+   var index = this.indexOf (value);
+   if(index!==-1){
+     return this.splice(index,1);
+   }
+   else return null;
+ }
+
+ var messages = [];
+ var rooms = {};
+ var Controllers = require('../controllers');
+ Controllers.Room.findAllRoom(function(err,data){
+   if(err){
+     console.log(err);
+   }else{
+     for (var i = 0; i < data.length; i++) {
+       rooms[data[i]._id]=[];
+     };
+   }
+
+ });
+
+var io = require('socket.io').listen(server);
+io.sockets.on('connection', function(socket){
+  socket.on('joinRoom', function(data){
+    socket.userId = data.userId; // 把信息挂在与之对应的socket上，方便后面断线的处理
+    socket.userName = data.userName;
+    if (data.fromId) // 说明是从一个房间进入另外一个，先退出房间
+    { 
+      rooms[data.fromId]&&rooms[data.fromId].removeByValue(socket);
+      Controllers.User.UserGetOutFromRoom(data.userId,function(err,result){
+        if (!err) {
+          console.log(result);
+        }
+        else {
+          console.log(err);
+        }
+      });
+      //向在要退出的那个房间的所有用户广播该用户离开的消息
+      for (var i = 0; i < rooms[data.fromId].length; i++) {
+        rooms[data.fromId][i].emit('userLeave', { username: data.userName });
+      };
+    }
+    //再进入房间
+    if (!rooms[data.toId]) {
+      rooms[data.toId] = [];
+    }
+    rooms[data.toId].push(socket);
+    Controllers.User.UserEnterRoom(data.userId, data.toId, function(err,result){
+      if(!err){
+        console.log(result);
+        //发布用户进入房间的消息
+        socket.roomId = data.toId;
+        for (var i = 0; i < rooms[data.toId].length; i++) {
+          rooms[data.toId][i].emit('userIn',{username:data.userName});
+        };
+      }
+      else{
+        console.log(err);
+      }
+    });
+  });
+  socket.on('getAllMessages',function(){
+    socket.emit('allMessages',messages);
+  })
+  socket.on('createMessage',function(message){
+    //messages.push(message);
+    if(!rooms[message.roomId]){
+      console.log('用户没用进入任何房间');
+      return;
+    }
+    for (var i = 0; i < rooms[message.roomId].length; i++) {
+      rooms[message.roomId][i].emit('messageAdded',message);
+    };
+  });
+function userLeaveAllRoom(){
+      //将socket退出rooms数组
+  for(var key in rooms){
+    rooms[key].removeByValue(socket);
+  }
+  //将user表内的roomId清掉，表示该用户没用进入任何的房间
+  Controllers.User.UserGetOutFromRoom(socket.userId, function(err,result){
+    if (!err) {
+      console.log(result);
+    }
+    else {
+      console.log(err);
+    }
+  });
+     //发布用户离开的消息
+  if (socket.roomId) {
+   for (var i = 0; i < rooms[socket.roomId].length; i++) {
+     rooms[socket.roomId][i].emit('userLeave',{ username: socket.userName });
+   };
+  }
+}
+   socket.on('disconnect',function(){
+     userLeaveAllRoom();
+   });
+   socket.on('leaveRoom',function(){
+     userLeaveAllRoom();
+   })
+});
+

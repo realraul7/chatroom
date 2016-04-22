@@ -1,0 +1,5 @@
+node_modules
+webroot
+npm-debug.log
+*.swp
+**.DS_Store

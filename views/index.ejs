@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html ng-app="chatRoom">
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/components/bootstrap/dist/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src="javascripts/socket.io.js"></script>
+    <script type="text/javascript" src="/components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/components/iscroll/build/iscroll.js"></script>
+    <script type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="/components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="javascripts/chatroom.js"></script>
+  </head>
+  <body data-ui-view="">
+   <script type="text/javascript">
+      var socket = io.connect('/');
+      socket.on('connected',function(){
+        
+      });
+    </script>
+  </body>
+</html>

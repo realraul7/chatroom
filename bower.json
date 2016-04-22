@@ -1,0 +1,21 @@
+{
+  "name": "chatroom",
+  "version": "0.0.0",
+  "authors": [
+    "beckgoal23 <876153364@qq.com>"
+  ],
+  "description": "chatroom",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.8",
+    "angular-route": "~1.4.8",
+    "angular-ui-router": "~0.2.15"
+  }
+}
