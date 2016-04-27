@@ -162,6 +162,7 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
     $scope.room_process_hide = true;//操作room的bar是否可见
     $scope.room_list = [];//显示的房间列表  
     $scope.room ={};//当前的房间
+    $scope.messageList = [];
     function ChatPanelInit(){
       $('.right-wrap')[0].style.cssText = "-webkit-transition: all .2s ease;-webkit-transform: scale(0);opacity:0; ";
       setTimeout(function(){
@@ -179,20 +180,22 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
            $scope.OnlineUserList = data;
          }).error(function(data){
            console.log(data);
-         })
+         });
+         $http({
+           url: '/api/getMessagesByRoomId',
+           method: 'POST',
+           data: {
+             roomId: $scope.room.id
+           }
+         }).success(function(data){ 
+           $scope.messageList = data;
+           setTimeout(function(){
+             $('.chat-content-panel ul>li:last-child')[0]&&$('.chat-content-panel ul>li:last-child')[0].scrollIntoView();
+           }, 500);
+         }).error(function(data){
+           console.log(data);
+         });
        };
-       
-       var myscroll1, myscroll2,myscroll3;
-       setTimeout(function(){
-         myscroll1 = new IScroll(".list-body-wrap", {
-           
-         });
-         myscroll2 = new IScroll(".chat-panel-body", {
-           startY:350-$('.chat-panel-body ul').height()
-         });
-        // myscroll2.scrollToElement($('.last')[0])
-        myscroll3 = new IScroll(".user-list .wrap");
-      }, 100);
        $scope.changeRoomProcessMode = function(arg){
         //
         $('.new-search-input').val('')
@@ -237,9 +240,6 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
               }
             }).success(function(data){
               $scope.room_list = data;
-              setTimeout(function(){
-                myscroll1 = new IScroll(".list-body-wrap")
-              }, 100)
             }).error(function(data){
               alert('更新房间列表失败');
             })
@@ -284,7 +284,7 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
      * 消息处理
      * 
      */
-     $scope.messageList = [];
+     
      socket.emit('getAllMessages');
      socket.on('allMessages', function(messages){
        $scope.messageList = messages;
@@ -299,7 +299,7 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
          return;
        }
        var newMessage = {};
-       newMessage.user=$scope.me.username;
+       newMessage.creator=$scope.me;
        newMessage.content=$scope.newMessage;
        newMessage.roomId = $scope.room.id;
        socket.emit('createMessage', newMessage);
@@ -323,8 +323,8 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
         });
           //系统发布用户进入消息
           $scope.messageList.push({
-            user:'系统中心',
-            content:'用户"'+message.username+'"进入房间'
+            creator: { username: '系统中心' },
+            content: '用户"'+message.username+'"进入房间'
           })
         });
     /**
@@ -345,8 +345,8 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
          });
         //系统发布用户离开消息
         $scope.messageList.push({
-          user:'系统中心',
-          content:'用户"'+message.username+'"离开房间'
+          creator: { username: '系统中心' },
+          content: '用户"'+message.username+'"离开房间'
         })
       });
      // 进入页面后加载默认房间
@@ -402,17 +402,10 @@ app.directive('autoScrollToBottom', function(){
       scope.$watch(function(){
         return element.children().length;
       }, function(){
-        if($('.chat-panel-body ul').height()>350){
-          myscroll2 = new IScroll(".chat-panel-body",{
-            startY:350-$('.chat-panel-body ul').height()
-          });
+        if (!$('.chat-content-panel ul>li').length) {
+          return;
         }
-        else{
-          myscroll2 = new IScroll(".chat-panel-body",{
-            startY:0
-          });
-        }
-        
+        $('.chat-content-panel ul>li:last-child')[0]&&$('.chat-content-panel ul>li:last-child')[0].scrollIntoView();
       })
     }
   }
@@ -440,19 +433,48 @@ app.directive('ctrlEnterBreakLine', function(){
     })
   }
 });
+app.directive('loading', function() {
+  var html = ['<div class="spinner">',
+    '  <div class="spinner-container container1">',
+    '    <div class="circle1"></div>',
+    '    <div class="circle2"></div>',
+    '    <div class="circle3"></div>',
+    '    <div class="circle4"></div>',
+    '  </div>',
+    '  <div class="spinner-container container2">',
+    '    <div class="circle1"></div>',
+    '    <div class="circle2"></div>',
+    '    <div class="circle3"></div>',
+    '    <div class="circle4"></div>',
+    '  </div>',
+    '  <div class="spinner-container container3">',
+    '    <div class="circle1"></div>',
+    '    <div class="circle2"></div>',
+    '    <div class="circle3"></div>',
+    '    <div class="circle4"></div>',
+    '  </div>',
+    '</div>'].join("");
+    return {
+        restrict: 'E',
+        template: html,
+        replace: true
+    };
+});
 function searchRoom(_http, _scope, name) {
-  _http({
-    url: '/api/findRoomByName',
-    method: 'POST',
-    data: {
-      name: name
-    }
-  }).success(function(data){
-    _scope.room_list = data;
-    setTimeout(function(){
-      myscroll1 = new IScroll(".list-body-wrap")
-    }, 100)
-  }).error(function(data){
-    alert('搜索房间失败');
-  })
+  $('.room-list-loading').show();
+  setTimeout(function(){
+    _http({
+      url: '/api/findRoomByName',
+      method: 'POST',
+      data: {
+        name: name
+      }
+    }).success(function(data){
+      _scope.room_list = data;
+      $('.room-list-loading').hide();
+    }).error(function(data){
+      alert('搜索房间失败');
+      $('.room-list-loading').hide();
+    });
+  }, 1000);
 }

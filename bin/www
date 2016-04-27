@@ -166,6 +166,9 @@ io.sockets.on('connection', function(socket){
       console.log('用户没用进入任何房间');
       return;
     }
+    Controllers.Message.CreateMessage(message, function(){
+      console.log('消息保存到数据库'+message);
+    })
     for (var i = 0; i < rooms[message.roomId].length; i++) {
       rooms[message.roomId][i].emit('messageAdded',message);
     };

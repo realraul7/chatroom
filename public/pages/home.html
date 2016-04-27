@@ -16,6 +16,7 @@
 			
 		</div>
 		<div class="list-body-wrap">
+			<loading class="room-list-loading" ></loading>
 			<ul class="list-body" >
 				<li ng-repeat = "room in room_list" style="position: relative">
 					<a href="javascript:void(0)" style="display: inline-block;height: 100%;width: 100%" >
@@ -39,7 +40,7 @@
 			<div class="chat-content-panel">
 				<ul auto-scroll-to-bottom>
 					<li class="content-li" ng-repeat = "message in messageList">
-						<span class="user-name">{{message.user}}：</span> <span class="chat-content">
+						<span class="user-name">{{message.creator.username}}：</span> <span class="chat-content">
 						{{message.content}}
 					</span>
 				</li>
