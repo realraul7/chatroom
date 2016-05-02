@@ -158,13 +158,14 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
  *  Home Controller
  *  
  */
- app.controller('HomeCtrl', function($scope, $state, socket, $http){
+ app.controller('HomeCtrl', function($scope, $sce, $state, socket, $http){
     $scope.room_process_hide = true;//操作room的bar是否可见
     $scope.user_list_show = false;
     $scope.user_list_btn_text = "查看在线用户";
     $scope.room_list = [];//显示的房间列表  
     $scope.room ={};//当前的房间
     $scope.messageList = [];
+    $scope.is_face_box_show = false;
     $scope.showUserList = function() {
       $scope.user_list_show = true;
       $scope.OnlineUserList = null;
@@ -193,6 +194,13 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
         $scope.user_list_show = false;
       }
     }
+    $scope.toggleFaceBox = function(){
+      $scope.is_face_box_show = !$scope.is_face_box_show;
+    }
+    $('.faceBoxWrap a').click(function(){
+      insertText($('.chat-input')[0], '['+ $(this).attr('title') +']');
+      $scope.is_face_box_show = false;
+    });
     function ChatPanelInit(){
       $scope.user_list_show = false;
       $scope.user_list_btn_text = "查看在线用户";
@@ -215,6 +223,8 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
          }).error(function(data){
            console.log(data);
          });
+         // 光标默认为选中
+         $('.chat-input')[0].focus();
        };
        $scope.changeRoomProcessMode = function(arg){
         //
@@ -312,19 +322,22 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
      socket.on('messageAdded', function(message){
        $scope.messageList.push(message);
      });
-     $scope.newMessage = '';
+     $('.chat-input').val('');
      $scope.createMessage = function(){
 
-       if ($scope.newMessage == '') {
+       if ($('.chat-input').val() == '') {
          return;
        }
        var newMessage = {};
        newMessage.creator=$scope.me;
-       newMessage.content=$scope.newMessage;
+       newMessage.content=$('.chat-input').val();
        newMessage.roomId = $scope.room.id;
        socket.emit('createMessage', newMessage);
-       $scope.newMessage = '';
+       $('.chat-input').val('');
      }
+    $scope.TrustDangerousSnippet = function(message) {
+      return $sce.trustAsHtml(processChatContent(message.content));
+    }; 
     /**
      * 监听并处理其他用户进入当前房间
      */
@@ -370,7 +383,7 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
         })
       });
      // 进入页面后加载默认房间
-     searchRoom($http, $scope, '');
+    searchRoom($http, $scope, '');
    });
 
 
@@ -498,3 +511,36 @@ function searchRoom(_http, _scope, name) {
     });
   }, 1000);
 }
+function insertText(obj,str) {
+    if (document.selection) {
+        var sel = document.selection.createRange();
+        sel.text = str;
+    } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
+        var startPos = obj.selectionStart,
+            endPos = obj.selectionEnd,
+            cursorPos = startPos,
+            tmpStr = obj.value;
+        obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
+        cursorPos += str.length;
+        obj.selectionStart = obj.selectionEnd = cursorPos;
+    } else {
+        obj.value += str;
+    }
+    obj.focus();
+}
+function processChatContent(str) {
+temp = ['微笑','撇嘴','色','发呆','得意','流泪','害羞','闭嘴','睡','大哭','尴尬','发怒','调皮','呲牙','惊讶','难过',
+    '酷','冷汗','抓狂','吐','偷笑','愉快','白眼','傲慢','饥饿','困','惊恐','流汗','憨笑','悠闲','奋斗','咒骂','疑问',
+    '嘘','晕','疯了','衰','骷髅','敲打','再见','擦汗','抠鼻','鼓掌','糗大了','坏笑','左哼哼','右哼哼','哈欠','鄙视',
+    '委屈','快哭了','阴险','亲亲','吓','可怜','菜刀','西瓜','啤酒','篮球','乒乓','咖啡','饭','猪头','玫瑰','凋谢','嘴唇',
+    '爱心','心碎','蛋糕','闪电','炸弹','刀','足球','瓢虫','便便','月亮','太阳','礼物','拥抱','强','弱','握手','胜利',
+    '抱拳','勾引','拳头','差劲','爱你','NO','OK','爱情','飞吻','跳跳','发抖','怄火','转圈','磕头','回头','跳绳','投降',
+    '激动','乱舞','献吻','左太极','右太极'];
+    for (var i = 0; i < temp.length; i++) {
+      str = str.replace('['+temp[i]+']', '<span class="icons icons-smiley_'+i+'"></span>');
+    }
+    return str;
+}
+
+
+

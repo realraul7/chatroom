@@ -328,6 +328,9 @@ text-align: center;
   text-align: left;
   margin-bottom: 20px;
 }
+.chat-content .icons {
+  vertical-align: -8px;
+}
 .right-wrap .chat-panel-footer {
   height: 50px;
   background: linear-gradient(#666666, #222222);
@@ -336,11 +339,12 @@ text-align: center;
   align-items: center;
 }
 .right-wrap .chat-panel-footer .chat-input {
-  width: 70%;
+  width: 80%;
   height: 32px;
   padding: 5px 10px;
   border-radius: 8px;
   color: #333;
+  margin-left: -20px;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   background: #f9f9f9;
   -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
@@ -372,6 +376,16 @@ text-align: center;
   border-radius: 4px;
   padding: 6px 10px!important;
   display: block!important;
+}
+.right-wrap .chat-panel-footer .expression-btn {
+  position: absolute;
+  display: inline-block;
+  left: 10px;
+  top: 10px;
+  width: 30px;
+  height: 30px;
+  background: url('../img/expression_btn_bg.png') no-repeat center center;
+  background-size: cover;
 }
 .right-wrap .user-list-wrap {
   position: absolute;
@@ -552,13 +566,559 @@ z-index: 999;
   text-align: center;
   cursor: pointer;
 }
+/**表情相关样式**/
 
+.faceBoxWrap {
+  width: 431px;
+  height: 258px;
+  box-sizing: border-box;
+  background-color: #fff;
+  overflow: hidden;
+  position: absolute;
+  top: -258px;
+  left: 0;
+}
+.faceBoxWrap a {
+    width: 28.7px;
+    float: left;
+    border-right: 1px solid #DFE6F6;
+    border-bottom: 1px solid #DFE6F6;
+    text-align: center;
+}
+.faceBoxWrap span {
+  margin-top: 3px;
+}
+.icons {
+    background-image: url(../img/face.png);
+    background-size: 396px 368px;
+    display: inline-block;
+}
 
-
-
-
-
-
+.icons-smiley_0 {
+  background-position:-224px -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_1 {
+  background-position:-368px -224px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_10 {
+  background-position:-224px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_100 {
+  background-position:-252px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_101 {
+  background-position:-280px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_102 {
+  background-position:-308px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_103 {
+  background-position:-336px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_104 {
+  background-position:-368px 0;
+  width:28px;
+  height:28px
+}
+.icons-smiley_11 {
+  background-position:-368px -28px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_12 {
+  background-position:-368px -56px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_13 {
+  background-position:-368px -84px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_14 {
+  background-position:-368px -112px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_15 {
+  background-position:-368px -140px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_16 {
+  background-position:-368px -168px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_17 {
+  background-position:-128px -192px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_18 {
+  background-position:-156px -192px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_19 {
+  background-position:-184px -192px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_2 {
+  background-position:-212px -192px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_20 {
+  background-position:-128px -220px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_21 {
+  background-position:-156px -220px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_22 {
+  background-position:-184px -220px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_23 {
+  background-position:-212px -220px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_24 {
+  background-position:-256px 0;
+  width:28px;
+  height:28px
+}
+.icons-smiley_25 {
+  background-position:-256px -28px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_26 {
+  background-position:-256px -56px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_27 {
+  background-position:-256px -84px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_28 {
+  background-position:-256px -112px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_29 {
+  background-position:-256px -140px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_3 {
+  background-position:-256px -168px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_30 {
+  background-position:-256px -196px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_31 {
+  background-position:-256px -224px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_32 {
+  background-position:0 -256px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_33 {
+  background-position:-28px -256px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_34 {
+  background-position:-56px -256px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_35 {
+  background-position:-84px -256px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_36 {
+  background-position:-112px -256px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_37 {
+  background-position:-140px -256px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_38 {
+  background-position:-168px -256px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_39 {
+  background-position:-196px -256px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_4 {
+  background-position:-224px -256px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_40 {
+  background-position:-252px -256px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_41 {
+  background-position:-284px 0;
+  width:28px;
+  height:28px
+}
+.icons-smiley_42 {
+  background-position:-284px -28px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_43 {
+  background-position:-284px -56px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_44 {
+  background-position:-284px -84px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_45 {
+  background-position:-284px -112px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_46 {
+  background-position:-284px -140px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_47 {
+  background-position:-284px -168px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_48 {
+  background-position:-284px -196px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_49 {
+  background-position:-284px -224px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_5 {
+  background-position:-284px -252px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_50 {
+  background-position:0 -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_51 {
+  background-position:-28px -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_52 {
+  background-position:-56px -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_53 {
+  background-position:-84px -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_54 {
+  background-position:-112px -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_55 {
+  background-position:-140px -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_56 {
+  background-position:-168px -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_57 {
+  background-position:-196px -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_58 {
+  background-position:-368px -196px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_59 {
+  background-position:-252px -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_6 {
+  background-position:-280px -284px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_60 {
+  background-position:-312px 0;
+  width:28px;
+  height:28px
+}
+.icons-smiley_61 {
+  background-position:-312px -28px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_62 {
+  background-position:-312px -56px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_63 {
+  background-position:-312px -84px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_64 {
+  background-position:-312px -112px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_65 {
+  background-position:-312px -140px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_66 {
+  background-position:-312px -168px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_67 {
+  background-position:-312px -196px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_68 {
+  background-position:-312px -224px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_69 {
+  background-position:-312px -252px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_7 {
+  background-position:-312px -280px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_70 {
+  background-position:0 -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_71 {
+  background-position:-28px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_72 {
+  background-position:-56px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_73 {
+  background-position:-84px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_74 {
+  background-position:-112px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_75 {
+  background-position:-140px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_76 {
+  background-position:-168px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_77 {
+  background-position:-196px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_78 {
+  background-position:-224px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_79 {
+  background-position:-252px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_8 {
+  background-position:-280px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_80 {
+  background-position:-308px -312px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_81 {
+  background-position:-340px 0;
+  width:28px;
+  height:28px
+}
+.icons-smiley_82 {
+  background-position:-340px -28px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_83 {
+  background-position:-340px -56px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_84 {
+  background-position:-340px -84px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_85 {
+  background-position:-340px -112px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_86 {
+  background-position:-340px -140px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_87 {
+  background-position:-340px -168px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_88 {
+  background-position:-340px -196px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_89 {
+  background-position:-340px -224px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_9 {
+  background-position:-340px -252px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_90 {
+  background-position:-340px -280px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_91 {
+  background-position:-340px -308px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_92 {
+  background-position:0 -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_93 {
+  background-position:-28px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_94 {
+  background-position:-56px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_95 {
+  background-position:-84px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_96 {
+  background-position:-112px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_97 {
+  background-position:-140px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_98 {
+  background-position:-168px -340px;
+  width:28px;
+  height:28px
+}
+.icons-smiley_99 {
+  background-position:-196px -340px;
+  width:28px;
+  height:28px
+}
 
 
 

@@ -162,6 +162,7 @@ io.sockets.on('connection', function(socket){
   })
   socket.on('createMessage',function(message){
     //messages.push(message);
+    console.log(message);
     if(!rooms[message.roomId]){
       console.log('用户没用进入任何房间');
       return;
