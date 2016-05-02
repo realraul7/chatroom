@@ -160,27 +160,47 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
  */
  app.controller('HomeCtrl', function($scope, $state, socket, $http){
     $scope.room_process_hide = true;//操作room的bar是否可见
+    $scope.user_list_show = false;
+    $scope.user_list_btn_text = "查看在线用户";
     $scope.room_list = [];//显示的房间列表  
     $scope.room ={};//当前的房间
     $scope.messageList = [];
+    $scope.showUserList = function() {
+      $scope.user_list_show = true;
+      $scope.OnlineUserList = null;
+      if($scope.user_list_btn_text === "查看在线用户") {
+        $scope.user_list_btn_text = "关闭用户列表"
+        $('.user-list-loading').show();
+        setTimeout(function(){
+          //更新在线用户列表
+          $http({
+            url: '/api/getOnlineUser',
+            method: 'POST',
+            data: {
+              roomId: $scope.room.id
+            }
+          }).success(function(data){ 
+            $scope.OnlineUserList = data;
+            $('.user-list-loading').hide();
+          }).error(function(data){
+            console.log(data);
+            $('.user-list-loading').hide();
+          });
+        }, 1000);
+      }
+      else {
+        $scope.user_list_btn_text = "查看在线用户";
+        $scope.user_list_show = false;
+      }
+    }
     function ChatPanelInit(){
+      $scope.user_list_show = false;
+      $scope.user_list_btn_text = "查看在线用户";
       $('.right-wrap')[0].style.cssText = "-webkit-transition: all .2s ease;-webkit-transform: scale(0);opacity:0; ";
       setTimeout(function(){
         $('.right-wrap')[0].style.cssText = "-webkit-transition: all .2s ease;-webkit-transform: scale(1);opacity:1; ";
       },200);
       $scope.messageList = [];
-         //更新在线用户列表
-         $http({
-           url: '/api/getOnlineUser',
-           method: 'POST',
-           data: {
-             roomId: $scope.room.id
-           }
-         }).success(function(data){ 
-           $scope.OnlineUserList = data;
-         }).error(function(data){
-           console.log(data);
-         });
          $http({
            url: '/api/getMessagesByRoomId',
            method: 'POST',

@@ -303,9 +303,6 @@ text-align: center;
   background: rgba(0, 0, 0, 0.2);
   overflow-y: auto;
 }
-.right-wrap .chat-panel-body .chat-content-panel {
-  height: 100%;
-}
 .right-wrap .chat-panel-body .chat-content-panel .content-li {
   padding-left: 18px;
 }
@@ -375,6 +372,34 @@ text-align: center;
   border-radius: 4px;
   padding: 6px 10px!important;
   display: block!important;
+}
+.right-wrap .user-list-wrap {
+  position: absolute;
+  width: 600px;
+  height: 350px;
+  background-color: #ededed;
+  top: 48px;
+  left: 0;
+  overflow-y: auto;
+}
+.user-list-wrap ul {
+border-bottom: 1px solid #e3e3e3;
+}
+.user-list-wrap li {
+  height: 60px;
+  line-height: 60px;
+  color: #000;
+  font-size: 20px;
+  padding-left: 20px;
+  border-color: #ccc;
+  cursor: pointer;
+  background: #f1f1f1;
+  background: -webkit-gradient(linear,left top,left bottom,from(#fff),to(#f1f1f1));
+  background: -webkit-linear-gradient(white,#f1f1f1);
+  background: -moz-linear-gradient(white,#f1f1f1);
+  background: -ms-linear-gradient(white,#f1f1f1);
+  background: -o-linear-gradient(white,#f1f1f1);
+  background: linear-gradient(#fff,#f1f1f1);
 }
 /*loading*/
 .spinner {
@@ -483,8 +508,57 @@ z-index: 999;
     -webkit-transform: scale(1.0);
   }
 }
-.room-list-loading{
+.room-list-loading, .user-list-loading{
   top:30px;
   left: 50%;
   margin-left: -30px;
 }
+
+
+
+
+.popup-wrap{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.3);
+}
+.popup-wrap .panel-layer{
+  position: absolute;
+  height:480px;
+  width: 418px;
+  background-color: #eff3f7;
+  top: 50%;
+  left: 50%;
+  margin-left: -209px;
+  margin-top: -240px;
+  border-radius: 8px;
+}
+.panel-layer header{
+  line-height: 34px;
+  background-color: #DDE1E6;
+  -moz-border-radius: 5px 5px 0 0;
+  -webkit-border-radius: 5px 5px 0 0;
+  border-top: 1px solid #F1F1F1;
+  border-bottom: 1px solid #ccd1d8;
+  padding-left: 8px;
+}
+.panel-layer .panel-close-btn {
+  float: right;
+  line-height: 34px;
+  width: 50px;
+  text-align: center;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+

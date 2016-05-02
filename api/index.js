@@ -1,3 +1,4 @@
+var fs = require('fs');
 module.exports = {
   registerApi: function(app) {
     var Controllers = require('../controllers');
@@ -155,5 +156,8 @@ module.exports = {
         }       
       })
     });
+     app.post('/UploadImage', function(req, res){
+        console.log(req); 
+     });
   }
 }
