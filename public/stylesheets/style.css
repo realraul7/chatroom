@@ -110,7 +110,8 @@ body {
   margin-left: 80px;
 }
 .home-list-wrap .user-bar {
-  height: 100px;
+  cursor: pointer;
+  display: inline-block;
 }
 .home-list-wrap .user-bar img,
 .home-list-wrap .user-bar p {
@@ -119,11 +120,9 @@ body {
 .home-list-wrap .user-bar img {
   width: 50px;
   height: 50px;
-  margin-left: 10px;
-  margin-top: 25px;
 }
 .home-list-wrap .user-bar p {
-  line-height: 100px;
+  line-height: 50px;
   margin-left: 10px;
 }
 .home-list-wrap .list-header {
@@ -222,7 +221,7 @@ body {
 }
 .right-wrap {
   float: left;
-  margin: 114px 0 0 100px;
+  margin: 60px 0 0 100px;
   width: 600px;
   height: 448px;
 }
@@ -399,6 +398,12 @@ text-align: center;
 .user-list-wrap ul {
 border-bottom: 1px solid #e3e3e3;
 }
+.user-list-wrap img{
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  margin-right: 10px;
+}
 .user-list-wrap li {
   height: 60px;
   line-height: 60px;
@@ -541,7 +546,6 @@ z-index: 999;
 }
 .popup-wrap .panel-layer{
   position: absolute;
-  height:480px;
   width: 418px;
   background-color: #eff3f7;
   top: 50%;
@@ -564,6 +568,118 @@ z-index: 999;
   line-height: 34px;
   width: 50px;
   text-align: center;
+  cursor: pointer;
+}
+.panel-layer .body-wrap {
+
+}
+.panel-layer .face-account {
+
+}
+.panel-layer img {
+  float: left;
+  width: 80px;
+  height: 80px;
+  margin: 20px 0 0 20px;
+  border-radius: 4px;
+}
+.panel-layer .right-area {
+  overflow: hidden;
+  padding-left: 20px;
+}
+.panel-layer .account {
+  font-size: 14px;
+  color: #333;
+}
+.panel-layer .account-number {
+  margin-left: 6px;
+}
+.panel-layer .sign-wrap {
+  border:1px solid #ccc;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 14px;
+  color:#666;
+}
+.panel-layer .sign-label{
+  float: left;
+  width: 100px;
+  margin-left: 30px;
+}
+.panel-layer .sign-content{
+  overflow: hidden;
+  margin-left: 20px;
+}
+.panel-layer .other-info-wrap {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.panel-layer section {
+  position: relative;
+}
+.other-info-wrap p{
+  position: relative;
+  line-height: 20px;
+  font-size: 14px;
+  padding-left: 66px;
+}
+.other-info-wrap label {
+  margin-right: 50px;
+}
+.sign-wrap textarea {
+  display: none;
+  //position: absolute;
+  // margin-left: -20px;
+}
+.sex-info select {
+  display: none;
+  //position: absolute;
+  //margin-left: -20px;
+}
+.age-info input {
+ display: none;
+  //position: absolute;
+  width: 46px;
+  //margin-left: -20px;
+}
+.phone-info input {
+ display: none;
+  //position: absolute;
+  width: 120px;
+ // margin-left: -100px;
+}
+.address-info input{
+  display: none;
+}
+.icon-pen {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url(../img/pen.png);
+  background-size: contain;
+  margin-left: 20px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.icon-done {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url(../img/done.jpg);
+  background-size: contain;
+  margin-left: 20px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.uploadfile {
+  opacity: 0;
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  overflow: hidden;
+  font-size: 100px;
   cursor: pointer;
 }
 /**表情相关样式**/

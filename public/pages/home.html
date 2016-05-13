@@ -2,8 +2,8 @@
 	<div class="home-wrap clear">
 		<a id="logout-btn" class="btn btn-primary" ng-click="logout()">登出</a>
 		<div class="home-list-wrap">
-			<div class="user-bar">
-				<img src="img/aa.jpg">
+			<div class="user-bar clear" ng-click="showUserInfo()">
+				<img class="host-face" src="uploadFiles/default.png">
 				<p class="user-name">{{me.username}}</p>
 			</div>
 			<div class="list-header box">
@@ -54,18 +54,40 @@
 			<div class="user-list-wrap" ng-show="user_list_show">
 				<loading class="user-list-loading" ></loading>
 				<ul>
-					<li ng-repeat = "user in OnlineUserList">{{user.username}}</li>	
+					<li ng-repeat = "user in OnlineUserList" ng-click="showUserInfo(user._id)"><img src={{user.avataUrl}}>{{user.username}}</li>	
 				</ul>
 			</div>
 		</div>
 		<!-- right-wrap end -->
 	</div>
 </div>
-<div class="popup-wrap" style="display: none;">
+<div class="popup-wrap" ng-show="popupWrapShow">
   <div class="panel-layer">
+  	<loading class="popup-loading" ng-show="popupLoadingShow" style="position:absolute;top:120px;left:50%;margin-left:-30px;"/>
   	<header>
   		个人资料
-  		<span class="panel-close-btn">关闭</span>
+  		<span class="panel-close-btn" ng-click="closePopup()">关闭</span>
   	</header>
+  	<div class="body-wrap">
+  		<section class="face-account clear">
+  			<img class="panel-face" ng-src={{popupUserInfo.avataUrl||'uploadFiles/default.png'}}>
+  			<input type = "file" class = "uploadfile" onchange="uploadFile()" name="files" ng-show="userEidtable"/>
+  			<div class="right-area">
+  				<h3 class="user-name">{{popupUserInfo.username}}</h3>
+  				<p class="account">
+  					<span>账号:</span><span class="account-number">{{popupUserInfo.email}}</span>
+  				</p>
+  			</div>
+  		</section>
+  		<section class="sign-wrap">
+  			<div class="sign-label">个性签名</div><div class="sign-content"><span class="content-area">{{popupUserInfo.sign}}</span><textarea class="eidt-area"></textarea><i class="icon-pen" ng-show="userEidtable" ng-click="processItem($event)"></i></div>
+  		</section>
+  		<section class="other-info-wrap">
+  		<p class="sex-info"><label>性别</label> <span>{{popupUserInfo.sex === 0?'未知':popupUserInfo.sex ===1?'男':popupUserInfo.sex===2?'女':''}}</span><select class="sex-select eidt-area"><option value="1">男</option><option value="2">女</option></select><i class="icon-pen" ng-show="userEidtable" ng-click="processItem($event)"></i></p>
+  		<p class="age-info"><label>年龄</label> <span>{{popupUserInfo.age}}</span><input type="number" class="eidt-area"></input><i class="icon-pen" ng-show="userEidtable" ng-click="processItem($event)"></i></p>
+  		<p class="phone-info"><label>手机</label> <span>{{popupUserInfo.phone}}</span><input type="text" class="eidt-area"></input><i class="icon-pen" ng-show="userEidtable" ng-click="processItem($event)"></i></p>
+  		<p class="address-info"><label>地址</label><span>{{popupUserInfo.address}}</span><input type="text" class="eidt-area"></input><i class="icon-pen" ng-show="userEidtable" ng-click="processItem($event)"></i></p>
+  		</section>
+  	</div>
   </div>
 </div>

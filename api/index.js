@@ -1,4 +1,5 @@
 var fs = require('fs');
+var multiparty = require('multiparty');
 module.exports = {
   registerApi: function(app) {
     var Controllers = require('../controllers');
@@ -156,8 +157,63 @@ module.exports = {
         }       
       })
     });
-     app.post('/UploadImage', function(req, res){
-        console.log(req); 
-     });
+    app.post('/uploadImage', function(req, res){
+      console.log('用户名:',req.session.userId);
+      var form = new multiparty.Form({uploadDir: './public/uploadFiles'});
+      form.on('error', function(err) {
+        console.log('Error parsing form: ' + err.stack);
+      });
+      form.parse(req, function (err, fields, files){
+        var filesTmp = JSON.stringify(files,null,2);
+        if (err){
+          console.log('parse error: ' + err);
+          res.send("写文件操作失败。");
+        }else {
+          console.log('parse files: ' + filesTmp);
+          var fileNameArr = Object.keys(files);
+          var firstFilename = fileNameArr[0];
+          var fileDataArr = files[firstFilename];
+          if(!fileDataArr) {
+            return;
+          }
+          console.log( typeof fileDataArr);
+          console.log(fileDataArr);
+          var fileData = fileDataArr[0];
+          var uploadedPath = fileData.path.split('public/')[1];
+          Controllers.User.updateUser(req.session.userId, {
+            avataUrl : uploadedPath
+          }, function(){
+            res.json({
+              url:uploadedPath
+            });
+          });
+        }
+      });
+    });
+    app.post('/api/getUserInfo', function(req, res){
+      Controllers.User.getUserInfo(req.body.userId, function(err, data) {
+        if (err) {
+          res.json(500, {
+            mes: err
+          });
+        } else {
+          res.json(data);
+        }
+      });
+    });
+    app.post('/api/updtateUser', function(req, res){
+      Controllers.User.updateUser(req.session.userId, req.body.updateItem, function(){
+        // res.json(req.body.updateItem);
+        Controllers.User.getUserInfo(req.session.userId, function(err, data) {
+          if (err) {
+            res.json(500, {
+              mes: err
+            });
+          } else {
+            res.json(data);
+          }
+        });
+      });
+    })
   }
 }

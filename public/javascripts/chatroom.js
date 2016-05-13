@@ -384,49 +384,116 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
       });
      // 进入页面后加载默认房间
     searchRoom($http, $scope, '');
+
+
+    /*
+      个人资料弹窗相关代码
+     */
+    $scope.popupLoadingShow = true;
+    $scope.popupWrapShow = false;
+    $scope.userEidtable = false;
+    $scope.showUserInfo = function(userId) {
+      // 初始化信息面板的显示
+      $scope.popupUserInfo = {};
+      $('.eidt-area').hide();
+      $('.eidt-area').prev().show();
+      $('.icon-done').attr('class','icon-pen');
+      if(!userId || userId === $scope.me._id) {
+        $scope.userEidtable = true;
+      } else {
+        $scope.userEidtable = false;
+      }
+      $scope.popupWrapShow = true;
+      setTimeout(function(){
+      //更新在线用户列表
+        $http({
+          url: '/api/getUserInfo',
+          method: 'POST',
+          data: {
+            userId: userId || $scope.me._id
+          }
+        }).success(function(data){ 
+          console.log(data);
+          $scope.popupUserInfo = data[0];
+          $scope.popupLoadingShow = false;
+        }).error(function(data){
+          console.log(data);
+        });
+      }, 500);
+    }
+    $scope.closePopup = function() {
+      $scope.popupWrapShow = false;
+      $scope.popupLoadingShow = true;
+    }
+    // 显示头像
+    if($scope.me.avataUrl) {
+      $('.host-face').attr('src', $scope.me.avataUrl);
+    } else {
+      $('.host-face').attr('src', 'uploadFiles/default.png');
+    }
+    $scope.processItem = function($event) {
+      var parentClass = $($event.target).parent()[0].className;
+      if($event.target.className === 'icon-pen') {
+        // 显示编辑框并自动填充数据
+        $($event.target).prev().val(parentClass !== 'sex-info'? $($event.target).prev().prev().html(): $($event.target).prev().prev().html() === '男'? 1: 2).show();
+        $($event.target).prev().prev().hide(); // 隐藏文本框
+        $event.target.className = "icon-done";
+      } else {
+        var item = {};
+        switch(parentClass) {
+          case 'sign-content':
+            item = {
+              sign:$('.sign-content .eidt-area').val()
+            }
+            break;
+          case 'sex-info':
+            item = {
+              sex:$('.sex-select').val()
+            }
+            break;
+          case 'age-info':
+            item = {
+              age:$('.age-info .eidt-area').val()
+            }
+            break;
+          case 'phone-info':
+            item = {
+              phone:$('.phone-info .eidt-area').val()
+            }
+            break;
+          case 'address-info':
+            item = {
+              address:$('.address-info .eidt-area').val()
+            }
+            break;
+          default:
+            //
+        }
+        console.log(item);
+        $scope.popupLoadingShow = true;
+        setTimeout(function(){
+        //更新用户信息
+          $http({
+            url: '/api/updtateUser',
+            method: 'POST',
+            data: {
+              updateItem: item
+            }
+          }).success(function(data){ 
+            $scope.popupLoadingShow = false;
+            $($event.target)[0].className='icon-pen';
+            $($event.target).prev().hide(); // 隐藏完成按钮
+            $scope.popupUserInfo = data[0];
+            $($event.target).prev().prev().show(); // 显示编辑
+          }).error(function(data){
+            console.log(data);
+          });
+        }, 500);
+      }
+    }
    });
 
 
-
-
-
-app.controller('RoomCtrl', function($scope, socket){
-  $scope.messages = [];
-  socket.emit('getAllMessages');
-  socket.on('allMessages', function(messages){
-    $scope.messages = messages;
-  })
-  socket.on('messageAdded', function(message){
-    $scope.messages.push(message);
-  })
-});
-app.controller('MessageCreatorCtrl', function($scope, socket){
-  $scope.mewMessage = '';
-  $scope.createMessage = function(){
-
-    if ($scope.newMessage == '') {
-      return;
-    }
-    socket.emit('createMessage', $scope.newMessage);
-    $scope.newMessage = '';
-  }
-});
-app.controller('LoginCtrl', function($scope, $http, $state){
-  $scope.login = function(){
-    $http({
-      url: '/api/login',
-      method: 'POST',
-      data: {
-        email: $scope.email
-      }
-    }).success(function(user){
-      $scope.$emit('login', user);
-      $state.go('Index.Room');
-    }).error(function(data){
-      $state.go('Index.Login');
-    })
-  }
-})
 
 //directive
 app.directive('autoScrollToBottom', function(){
@@ -541,6 +608,20 @@ temp = ['微笑','撇嘴','色','发呆','得意','流泪','害羞','闭嘴','�
     }
     return str;
 }
-
+function uploadFile (){
+  var formData = new FormData();
+  var files = $('.uploadfile')[0].files;
+  var file = files[0];
+  formData.append('myfile', file);
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/uploadImage', true);
+  xhr.onload = function (e){
+    if (this.status == 200){
+       $('.host-face').attr('src', JSON.parse(this.response).url);
+       $('.panel-face').attr('src', JSON.parse(this.response).url);
+    }
+  };
+  xhr.send(formData);
+}
 
 
