@@ -110,8 +110,8 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
         alert('请输入正确的邮箱');
         return;
       }
-      if (username.length < 8) {
-        alert('用户名必须大于等于8位');
+      if (username.length < 4) {
+        alert('用户名必须大于等于4位');
         return;
       }
       if (!/[a-z0-9A-Z]{8,}/.test(username)) {
@@ -135,11 +135,18 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
           username: username,
           password: password
         }
-      }).success(function(user){
-        alert('注册成功,请登录')
+      }).success(function(data){
+        if(data.message) {
+          alert(data.message);
+          return;
+        }
+        alert('注册成功,请登录');
+        $('#login-modal').modal();
+        $('#register-modal').modal('hide');
+
       }).error(function(data) {
-        if (data.mes.code == 11000) {
-          alert('用户名已经被注册');
+        if (data.message) {
+          alert(data.message);
         }
       })
     };
@@ -429,7 +436,7 @@ app.controller('IndexCtrl', function($scope, $state, socket, $http, $rootScope){
     if($scope.me.avataUrl) {
       $('.host-face').attr('src', $scope.me.avataUrl);
     } else {
-      $('.host-face').attr('src', 'uploadFiles/default.png');
+      $('.host-face').attr('src', 'uploadFiles/default.jpg');
     }
     $scope.processItem = function($event) {
       var parentClass = $($event.target).parent()[0].className;

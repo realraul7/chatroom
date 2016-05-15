@@ -104,6 +104,10 @@ body {
   left: 50%;
   margin-left: -250px;
 }
+#logout-btn {
+  position: absolute;
+  right: 20px;
+}
 .home-list-wrap {
   float: left;
   width: 280px;
@@ -304,6 +308,9 @@ text-align: center;
 }
 .right-wrap .chat-panel-body .chat-content-panel .content-li {
   padding-left: 18px;
+}
+.right-wrap .chat-panel-body .chat-content-panel .content-li .user-name {
+  cursor: pointer;
 }
 .right-wrap .chat-panel-body .chat-content-panel .content-li .chat-content {
   background: #fff;
