@@ -3,3 +3,4 @@ webroot
 npm-debug.log
 *.swp
 **.DS_Store
+public/uploadFiles
