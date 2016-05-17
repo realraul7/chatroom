@@ -39,7 +39,6 @@ module.exports = {
       }
     });
     app.post('/api/login', function(req, res) {
-
       Controllers.User.CheckLogin(req.body.account, function(err, data) {
         if (err) {
           res.json(500, {
@@ -73,7 +72,7 @@ module.exports = {
                         mes:'用户不存在'
                       });
                     }
-                    
+
                   }
                 })
     });
@@ -154,7 +153,7 @@ module.exports = {
           });
         } else {
           res.json(data);
-        }       
+        }
       })
     });
     app.post('/uploadImage', function(req, res){
